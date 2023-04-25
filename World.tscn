@@ -1,0 +1,105 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://WallNode.tscn" type="PackedScene" id=1]
+[ext_resource path="res://light.png" type="Texture" id=2]
+[ext_resource path="res://Player.gd" type="Script" id=3]
+[ext_resource path="res://Player1.png" type="Texture" id=4]
+[ext_resource path="res://backgroundplay.jpeg" type="Texture" id=5]
+[ext_resource path="res://ARCADECLASSIC.TTF" type="DynamicFontData" id=6]
+
+[sub_resource type="DynamicFont" id=7]
+size = 30
+font_data = ExtResource( 6 )
+
+[sub_resource type="CircleShape2D" id=6]
+radius = 24.0
+
+[sub_resource type="CircleShape2D" id=5]
+radius = 19.0
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 13, 152 )
+
+[node name="World" type="Node2D"]
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+rect_scale = Vector2( 25.5636, 15.0832 )
+texture = ExtResource( 5 )
+expand = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( -1, 0 )
+zoom = Vector2( 0.5, 0.5 )
+smoothing_speed = 10.0
+
+[node name="Sprite" type="Sprite" parent="."]
+modulate = Color( 0.0941176, 0.0705882, 0.262745, 1 )
+position = Vector2( 0, 6 )
+scale = Vector2( 200, 200 )
+z_index = -5
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+follow_viewport_enable = true
+
+[node name="RichTextLabel" type="Label" parent="CanvasLayer"]
+show_behind_parent = true
+margin_left = 40.0
+margin_top = 48.0
+margin_right = 120.0
+margin_bottom = 80.0
+custom_fonts/font = SubResource( 7 )
+
+[node name="PlayerNode" type="Node2D" parent="."]
+
+[node name="Player" type="KinematicBody2D" parent="PlayerNode"]
+script = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerNode/Player"]
+position = Vector2( 64, 0 )
+scale = Vector2( -0.971968, 0.763669 )
+shape = SubResource( 6 )
+
+[node name="Sprite" type="Sprite" parent="PlayerNode/Player"]
+position = Vector2( 64, 0 )
+scale = Vector2( 0.0571795, 0.063602 )
+texture = ExtResource( 4 )
+
+[node name="Detect" type="Area2D" parent="PlayerNode/Player"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerNode/Player/Detect"]
+position = Vector2( 64, 0 )
+scale = Vector2( -1.31456, 0.928349 )
+shape = SubResource( 5 )
+
+[node name="Resetter" type="Area2D" parent="PlayerNode/Player"]
+position = Vector2( 64, 0 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerNode/Player/Resetter"]
+position = Vector2( -325, 0 )
+shape = SubResource( 3 )
+
+[node name="Light2D" type="Light2D" parent="PlayerNode/Player"]
+position = Vector2( 64, 0 )
+texture = ExtResource( 2 )
+shadow_enabled = true
+
+[node name="WallNode" parent="." instance=ExtResource( 1 )]
+position = Vector2( 312, 226 )
+
+[node name="WallNode2" parent="." instance=ExtResource( 1 )]
+position = Vector2( 632, 280 )
+
+[node name="WallNode3" parent="." instance=ExtResource( 1 )]
+position = Vector2( 977, 178 )
+
+[node name="WallNode4" parent="." instance=ExtResource( 1 )]
+position = Vector2( 1296, 296 )
+
+[node name="WallNode5" parent="." instance=ExtResource( 1 )]
+position = Vector2( 1592, 272 )
+
+[connection signal="area_entered" from="PlayerNode/Player/Detect" to="PlayerNode/Player" method="_on_Detect_area_entered"]
+[connection signal="body_entered" from="PlayerNode/Player/Detect" to="PlayerNode/Player" method="_on_Detect_body_entered"]
+[connection signal="body_entered" from="PlayerNode/Player/Resetter" to="PlayerNode/Player" method="_on_Resetter_body_entered"]
